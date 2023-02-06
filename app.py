@@ -2,16 +2,13 @@ import pandas
 import numpy
 import pickle
 import streamlit as st
+import contractions
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.collocations import *
 import string
 from nltk.stem import WordNetLemmatizer
-import unidecode
-from word2number import w2n
-import contractions
-from nltk.tokenize import RegexpTokenizer
 import re
 
 
@@ -44,6 +41,11 @@ def remove_small_words(text):
         clean = re.compile(r'\b\w{1,2}\b')
         
         return re.sub(clean, '', text)
+def expand_contractions(text):
+        """Expand shortened words, e.g. don't to do not"""
+        text = contractions.fix(text)
+        
+        return text
 
 def preprocess(text):
     """This function preprocesses text"""
@@ -52,6 +54,7 @@ def preprocess(text):
     text = lemmat(text)
     text = remove_punct(text)
     text = lowercase_text(text)
+    text=expand_contractions(text)
     return text
 
 vectorizer=pickle.load(open('vectorizerr.sav','rb'))
@@ -63,12 +66,11 @@ st.write("A model that classifies whether an email is a spam/ham")
 input_sms = st.text_input("Enter the email")
 
 if st.button("Classify"):
-
     processed_sms=preprocess(input_sms)
     vector_input=vectorizer.transform([processed_sms])
     input_array=vector_input.toarray()
-    prediction=model.predict(input_array)
+    prediction=model.predict(input_array)[0]
     if prediction == 0:
-        st.header("This is a Ham")
+        st.success("This is a Ham")
     else:
-        st.header("Sparm Alert !!!!!")
+        st.warning("Sparm Alert !!!!!")

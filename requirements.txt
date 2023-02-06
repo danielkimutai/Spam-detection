@@ -1,0 +1,9 @@
+pandas
+numpy
+word2number==1.1
+scikit-learn
+nltk
+requests
+regex 
+Unidecode 
+streamlit==1.17.0

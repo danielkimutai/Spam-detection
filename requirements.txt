@@ -7,3 +7,4 @@ requests
 regex 
 Unidecode 
 streamlit==1.17.0
+contractions==0.1.73

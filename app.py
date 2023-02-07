@@ -4,6 +4,7 @@ import pickle
 import streamlit as st
 import contractions
 import nltk
+nltk.download('wordnet')
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.collocations import *

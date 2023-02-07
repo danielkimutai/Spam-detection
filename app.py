@@ -60,17 +60,24 @@ def preprocess(text):
 vectorizer=pickle.load(open('vectorizerr.sav','rb'))
 model=pickle.load(open('grid_model.sav','rb'))
 
-st.title("Email/Spam Classifier")
-st.write("A model that classifies whether an email is a spam/ham")
 
-input_sms = st.text_input("Enter the email")
-
-if st.button("Classify"):
-    processed_sms=preprocess(input_sms)
-    vector_input=vectorizer.transform([processed_sms])
-    input_array=vector_input.toarray()
-    prediction=model.predict(input_array)[0]
-    if prediction == 0:
-        st.success("This is a Ham")
-    else:
-        st.warning("Sparm Alert !!!!!")
+nav=st.sidebar.radio("Navigation",["Home","Classifier"])
+if nav == "Home":
+    st.title("Email/spamClassifier")
+    st.header('Overview')
+    st.write("This is a machine learning model that takes in an email and classifies it whether its a Spam or Ham")
+    st.image("images.png",width=500)
+    
+    
+if nav == "Classifier":
+    st.header('Classifying')
+    input_sms = st.text_input("Enter your email here")
+    if st.button("Classify"):
+        processed_sms=preprocess(input_sms)
+        vector_input=vectorizer.transform([processed_sms])
+        input_array=vector_input.toarray()
+        prediction=model.predict(input_array)[0]
+        if prediction == 0:
+            st.success(" Ham")
+        else:
+            st.warning("Sparm Alert !!!!!")
